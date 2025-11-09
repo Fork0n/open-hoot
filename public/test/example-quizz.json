@@ -1,0 +1,20 @@
+[
+  {
+    "question": "What is the capital of France?",
+    "img": "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600",
+    "answers": ["London", "Berlin", "Paris", "Madrid"],
+    "correct": 2
+  },
+  {
+    "question": "Which planet is the largest in our solar system?",
+    "img": "https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=600",
+    "answers": ["Saturn", "Jupiter", "Neptune", "Uranus"],
+    "correct": 1
+  },
+  {
+    "question": "Who wrote Romeo and Juliet?",
+    "img": "https://images.unsplash.com/photo-1507842072343-583f20270319?w=600",
+    "answers": ["Jane Austen", "William Shakespeare", "Charles Dickens", "Mark Twain"],
+    "correct": 1
+  }
+]

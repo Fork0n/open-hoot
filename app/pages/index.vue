@@ -9,10 +9,12 @@ const code = ref(Array(6).fill(''))
 const loading = ref(false)
 
 async function createGame() {
+  if (loading.value) return
   loading.value = true
   try {
-    const code = await createGameDoc()
-    router.push(`/create?code=${code}`)
+    const newCode = await createGameDoc()
+    // navigate to create page with code query (replace or push is OK)
+    router.push(`/create?code=${newCode}`)
   } catch (err) {
     console.error(err)
     alert('Failed to create game.')
@@ -27,12 +29,12 @@ async function joinGame() {
     alert('Please enter a full 6-digit code.')
     return
   }
-  const exists = await checkGameExists(joinedCode)
+  const exists = await checkGameExists(joinedCode.replace('-', ''))
   if (!exists) {
     alert('Game not found.')
     return
   }
-  router.push(`/join?code=${joinedCode}`)
+  router.push(`/join?code=${joinedCode.replace('-', '')}`)
 }
 
 function onInput(e: Event, index: number) {
@@ -95,7 +97,7 @@ const formattedCode = computed(() => {
 
         <button class="btn join-btn" @click="joinGame">Join Game</button>
         <div class="divider">OR</div>
-        <button @click="createGame" class="btn create" :disabled="loading">
+        <button type="button" @click="createGame" class="btn create" :disabled="loading">
           {{ loading ? 'Creating...' : 'Create Game' }}
         </button>
       </div>
@@ -104,6 +106,7 @@ const formattedCode = computed(() => {
 </template>
 
 <style scoped>
+/* styles unchanged */
 .app-wrapper {
   position: relative;
   min-height: 100vh;
