@@ -1,0 +1,17 @@
+[
+  {
+    "question": "What happened on 9/11?",
+    "answers": [
+      "Nothing ever happens",
+      "Hitler committed suicide",
+      "WWI armistice",
+      "9/11 was an inside job"
+    ],
+    "correct": 0
+  },
+  {
+    "question": "Who invented the light bulb?",
+    "answers": ["Nikola Tesla", "Thomas Edison", "Albert Einstein", "Isaac Newton"],
+    "correct": 1
+  }
+]
