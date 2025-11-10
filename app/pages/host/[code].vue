@@ -2,7 +2,7 @@
 import { ref, onMounted, computed, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { doc, onSnapshot } from 'firebase/firestore'
-import { db, submitAnswer } from '../../lib/firebaseGame'
+import { db, nextQuestion as nextQuestionFn, endGame as endGameFn } from '../../lib/firebaseGame'
 import Dither from '../../components/Dither.vue'
 
 const route = useRoute()
@@ -10,19 +10,18 @@ const router = useRouter()
 const gameCode = ref((route.params.code as string) || '')
 const quiz = ref<any[]>([])
 const currentQuestion = ref(0)
-const scores = ref<Record<string, number>>({})
 const players = ref<any[]>([])
-const answered = ref<Record<string, boolean | number>>({})
+const scores = ref<Record<string, number>>({})
+const answered = ref<Record<string, number>>({})
 const showResults = ref(false)
 const gameState = ref('waiting')
-const questionStartTime = ref(0)
-const hasAnswered = ref(false)
+const timeLeft = ref(20)
+const timerInterval = ref<number | null>(null)
 
 const colors = ['#9b59b6', '#e74c3c', '#f39c12', '#2ecc71']
 
 const currentQ = computed(() => quiz.value?.[currentQuestion.value])
-const playerId = computed(() => localStorage.getItem('playerId') || '')
-const playerData = computed(() => players.value.find(p => p.id === playerId.value))
+const answeredCount = computed(() => Object.keys(answered.value).length)
 
 const topPlayers = computed(() => {
   return players.value
@@ -30,21 +29,38 @@ const topPlayers = computed(() => {
       .sort((a, b) => b.score - a.score)
 })
 
-watch(currentQuestion, () => {
-  hasAnswered.value = false
-  questionStartTime.value = Date.now()
-})
-
 let unsubscribe: (() => void) | null = null
 
+watch(answeredCount, (newCount) => {
+  if (gameState.value === 'started' && newCount === players.value.length && players.value.length > 0) {
+    setTimeout(() => nextQuestion(), 1000)
+  }
+})
+
+watch(currentQuestion, () => {
+  resetTimer()
+})
+
+function resetTimer() {
+  if (timerInterval.value) {
+    clearInterval(timerInterval.value)
+  }
+  timeLeft.value = 20
+  timerInterval.value = window.setInterval(() => {
+    timeLeft.value--
+    if (timeLeft.value <= 0) {
+      clearInterval(timerInterval.value!)
+      nextQuestion()
+    }
+  }, 1000)
+}
+
 onMounted(async () => {
-  const pid = localStorage.getItem('playerId')
-  if (!pid) {
+  const isHost = localStorage.getItem(`host-${gameCode.value}`)
+  if (!isHost) {
     router.push('/')
     return
   }
-
-  questionStartTime.value = Date.now()
 
   const ref = doc(db, 'games', gameCode.value)
   unsubscribe = onSnapshot(ref, (snap) => {
@@ -53,26 +69,42 @@ onMounted(async () => {
 
     quiz.value = data?.quiz || []
     currentQuestion.value = data?.currentQuestion ?? 0
-    scores.value = data?.scores || {}
     players.value = data?.players || []
+    scores.value = data?.scores || {}
     answered.value = data?.answered || {}
     gameState.value = data?.state || 'waiting'
     showResults.value = data?.state === 'ended'
+
+    if (gameState.value === 'started' && !timerInterval.value) {
+      resetTimer()
+    }
   })
 })
 
 onUnmounted(() => {
   if (unsubscribe) unsubscribe()
+  if (timerInterval.value) clearInterval(timerInterval.value)
 })
 
-async function selectAnswer(answerIndex: number) {
-  if (hasAnswered.value || !playerId.value) return
-
-  hasAnswered.value = true
-  const timeMs = Date.now() - questionStartTime.value
-
+async function nextQuestion() {
+  if (timerInterval.value) {
+    clearInterval(timerInterval.value)
+    timerInterval.value = null
+  }
   try {
-    await submitAnswer(gameCode.value, playerId.value, answerIndex, timeMs)
+    await nextQuestionFn(gameCode.value, currentQuestion.value, quiz.value.length)
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function endGame() {
+  if (timerInterval.value) {
+    clearInterval(timerInterval.value)
+    timerInterval.value = null
+  }
+  try {
+    await endGameFn(gameCode.value)
   } catch (err) {
     console.error(err)
   }
@@ -83,16 +115,11 @@ async function selectAnswer(answerIndex: number) {
   <div class="game-wrapper">
     <Dither class="background" />
 
-    <div v-if="gameState === 'waiting'" class="loading">
-      <div class="spinner"></div>
-      <p class="loading-quiz">Waiting for host to start...</p>
-    </div>
-
-    <div v-else-if="showResults" class="results-view">
+    <div v-if="showResults" class="results-view">
       <h1>🎉 Game Over!</h1>
 
       <div class="leaderboard">
-        <h2>Final Scores</h2>
+        <h2>Final Leaderboard</h2>
         <div v-if="topPlayers.length === 0" class="no-players">
           No players found
         </div>
@@ -102,7 +129,6 @@ async function selectAnswer(answerIndex: number) {
             :key="player.id"
             class="leaderboard-item"
             :class="{
-            me: player.id === playerId,
             'rank-1': index === 0,
             'rank-2': index === 1,
             'rank-3': index === 2
@@ -116,26 +142,39 @@ async function selectAnswer(answerIndex: number) {
       </div>
     </div>
 
-    <div v-else-if="gameState === 'started'" class="player-view">
-      <div class="question-info">
-        <p class="question-number">Question {{ currentQuestion + 1 }} / {{ quiz.length }}</p>
+    <div v-else-if="gameState === 'started'" class="host-view">
+      <div class="question-view">
+        <div class="question-header">
+          <div class="header-top">
+            <span class="question-counter">Question {{ currentQuestion + 1 }} / {{ quiz.length }}</span>
+            <span class="timer" :class="{ warning: timeLeft <= 5 }">{{ timeLeft }}s</span>
+          </div>
+          <h2>{{ currentQ?.question }}</h2>
+        </div>
+
+        <div v-if="currentQ?.img" class="image-container">
+          <img :src="currentQ.img" alt="Question" class="question-image" />
+        </div>
+
+        <div class="answers-grid">
+          <div
+              v-for="(answer, index) in currentQ?.answers"
+              :key="index"
+              class="answer-box"
+              :style="{ backgroundColor: colors[index] }"
+          >
+            <span class="answer-text">{{ answer }}</span>
+          </div>
+        </div>
       </div>
 
-      <div v-if="!hasAnswered" class="player-answers">
-        <button
-            v-for="(answer, index) in currentQ?.answers"
-            :key="index"
-            class="answer-button"
-            :style="{ backgroundColor: colors[index] }"
-            @click="selectAnswer(index)"
-        >
-          {{ answer }}
-        </button>
+      <div class="players-info">
+        <p>{{ answeredCount }} / {{ players.length }} answered</p>
       </div>
+    </div>
 
-      <div v-else class="answered-text">
-        ✓ Answer submitted!
-      </div>
+    <div v-else class="host-view">
+      <h2>Waiting for game to start...</h2>
     </div>
   </div>
 </template>
@@ -160,105 +199,113 @@ async function selectAnswer(answerIndex: number) {
   z-index: 0;
 }
 
-.loading, .player-view, .results-view {
+.host-view, .results-view {
   position: relative;
   z-index: 1;
-}
-
-.loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
-}
-
-.spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid #555;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.loading-quiz {
-  font-size: 1.5rem;
-}
-
-.player-view {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2rem;
   width: 100%;
-  max-width: 800px;
+  max-width: 1400px;
 }
 
-.question-info {
-  text-align: center;
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 1rem 2rem;
+.question-view {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  height: calc(100vh - 8rem);
+}
+
+.question-header {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1.5rem;
   border-radius: 15px;
-  border: 1px solid #333;
-  width: 100%;
+  border: 2px solid #333;
 }
 
-.question-number {
-  font-size: 1.3rem;
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.question-counter {
+  font-size: 1.2rem;
   color: #aaa;
-  margin: 0;
   font-weight: 600;
 }
 
-.player-answers {
+.timer {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2ecc71;
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  min-width: 60px;
+  text-align: center;
+}
+
+.timer.warning {
+  color: #e74c3c;
+}
+
+.question-header h2 {
+  font-size: 2rem;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.image-container {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.question-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 15px;
+  border: 2px solid #333;
+}
+
+.answers-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
-  width: 100%;
 }
 
-.answer-button {
-  aspect-ratio: 1;
-  font-size: 1.2rem;
-  font-weight: 700;
-  border: none;
+.answer-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
   border-radius: 15px;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 150px;
-  color: white;
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-  opacity: 0.9;
-}
-
-.answer-button:hover:not(.disabled) {
-  transform: scale(1.05);
-  opacity: 1;
-}
-
-.answer-button:active:not(.disabled) {
-  transform: scale(0.95);
-}
-
-.answer-button.disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.answered-text {
-  color: #2ecc71;
   font-size: 1.5rem;
   font-weight: 700;
-  background-color: rgba(0, 0, 0, 0.6);
-  padding: 1rem 2rem;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  min-height: 100px;
+}
+
+.answer-text {
+  word-break: break-word;
+}
+
+.players-info {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 1rem;
+  text-align: center;
   border-radius: 10px;
+  border: 1px solid #333;
+  margin-top: 1rem;
+}
+
+.players-info p {
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 .results-view {
@@ -267,8 +314,9 @@ async function selectAnswer(answerIndex: number) {
   align-items: center;
   justify-content: center;
   gap: 2rem;
-  width: 100%;
   max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 .results-view h1 {
@@ -306,11 +354,6 @@ async function selectAnswer(answerIndex: number) {
   border-radius: 10px;
   margin-bottom: 1rem;
   font-size: 1.2rem;
-}
-
-.leaderboard-item.me {
-  background-color: rgba(52, 152, 219, 0.2);
-  border: 2px solid #3498db;
 }
 
 .leaderboard-item.rank-1 {

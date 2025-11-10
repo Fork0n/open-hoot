@@ -1,8 +1,6 @@
-// app/lib/firebaseGame.ts
 import { initializeApp } from 'firebase/app'
-import { getFirestore, doc, setDoc, getDoc, updateDoc } from 'firebase/firestore'
+import { getFirestore, doc, setDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore'
 
-// Firebase setup
 const firebaseConfig = {
     apiKey: "AIzaSyAgzXYlC2J7QaYK-uCoIAinXpJfZOrQwrk",
     authDomain: "open-hoot.firebaseapp.com",
@@ -16,70 +14,79 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 export const db = getFirestore(app)
 
-// Generate plain 6-char code
 export function generateGameCode(): string {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
     let code = ''
     for (let i = 0; i < 6; i++) {
-        code += chars.charAt(Math.floor(Math.random() * chars.length))
+        code += chars[Math.floor(Math.random() * chars.length)]
     }
     return code
 }
 
-// Create game document with simple uniqueness retry
 export async function createGameDoc(): Promise<string> {
-    const maxAttempts = 8
-    for (let attempt = 0; attempt < maxAttempts; attempt++) {
-        const code = generateGameCode()
-        const ref = doc(db, 'games', code)
-        const snap = await getDoc(ref)
-        if (!snap.exists()) {
-            await setDoc(ref, {
-                createdAt: Date.now(),
-                players: [],
-                state: 'waiting',
-                currentQuestion: null,
-                quizUrl: null,
-                quiz: null,
-                scores: {},
-                streaks: {},
-                answered: {}
-            })
-            return code
-        }
-    }
-    throw new Error('Failed to generate a unique game code.')
+    const code = generateGameCode()
+    const gameRef = doc(db, 'games', code)
+    await setDoc(gameRef, {
+        code,
+        state: 'waiting',
+        players: [],
+        scores: {},
+        streaks: {},
+        answered: {},
+        quiz: [],
+        currentQuestion: 0,
+        createdAt: Date.now()
+    })
+    return code
 }
 
-// Check existence
-export async function checkGameExists(code: string) {
-    const ref = doc(db, 'games', code)
-    const snap = await getDoc(ref)
+export async function checkGameExists(code: string): Promise<boolean> {
+    const normalizedCode = code.toUpperCase().replace(/-/g, '')
+    const gameRef = doc(db, 'games', normalizedCode)
+    const snap = await getDoc(gameRef)
     return snap.exists()
 }
 
-// Update game with quiz URL and initialize quiz data
 export async function setQuizUrl(gameCode: string, quizUrl: string) {
-    const gameRef = doc(db, 'games', gameCode)
+    const normalizedCode = gameCode.toUpperCase().replace(/-/g, '')
+    const gameRef = doc(db, 'games', normalizedCode)
     const quiz = await fetchQuiz(quizUrl)
+    await updateDoc(gameRef, { quiz })
+}
+
+export async function startGame(gameCode: string) {
+    const normalizedCode = gameCode.toUpperCase().replace(/-/g, '')
+    const gameRef = doc(db, 'games', normalizedCode)
     await updateDoc(gameRef, {
-        quizUrl,
-        quiz,
-        currentQuestion: 0
+        state: 'started',
+        currentQuestion: 0,
+        answered: {}
     })
 }
 
-// Fetch quiz from URL
 export async function fetchQuiz(url: string) {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error('Failed to fetch quiz')
-    return response.json()
+    const res = await fetch(url)
+    if (!res.ok) throw new Error('Failed to fetch quiz')
+    return await res.json()
 }
 
-// Submit answer
+export async function addPlayerToGame(gameCode: string, playerId: string, username: string, avatar: string) {
+    const normalizedCode = gameCode.toUpperCase().replace(/-/g, '')
+    const gameRef = doc(db, 'games', normalizedCode)
+    await updateDoc(gameRef, {
+        players: arrayUnion({ id: playerId, username, avatar })
+    })
+}
+
 export async function submitAnswer(gameCode: string, playerId: string, answerIndex: number, timeMs: number) {
-    const gameRef = doc(db, 'games', gameCode)
+    const normalizedCode = gameCode.toUpperCase().replace(/-/g, '')
+    const gameRef = doc(db, 'games', normalizedCode)
     const snap = await getDoc(gameRef)
+
+    if (!snap.exists()) {
+        throw new Error('Game not found')
+    }
+
     const data = snap.data()
     const quiz = data?.quiz
     const currentQ = data?.currentQuestion ?? 0
@@ -92,17 +99,38 @@ export async function submitAnswer(gameCode: string, playerId: string, answerInd
 
     let points = 0
     if (isCorrect) {
-        const speedBonus = Math.max(0, 1000 - Math.floor(timeMs / 10))
-        const currentStreak = (streaks[playerId] || 0) + 1
-        const streakBonus = currentStreak > 1 ? currentStreak * 50 : 0
-        points = 100 + speedBonus + streakBonus
-        streaks[playerId] = currentStreak
+        const basePoints = 1000
+        const timeBonus = Math.max(0, 500 - Math.floor(timeMs / 40))
+        streaks[playerId] = (streaks[playerId] || 0) + 1
+        const streakBonus = streaks[playerId] * 100
+        points = basePoints + timeBonus + streakBonus
     } else {
         streaks[playerId] = 0
     }
 
     scores[playerId] = (scores[playerId] || 0) + points
-    answered[playerId] = true
+    answered[playerId] = answerIndex
 
     await updateDoc(gameRef, { scores, streaks, answered })
 }
+
+export async function nextQuestion(gameCode: string, currentQ: number, quizLength: number) {
+    const gameRef = doc(db, 'games', gameCode.toUpperCase())
+
+    if (currentQ < quizLength - 1) {
+        await updateDoc(gameRef, {
+            currentQuestion: currentQ + 1,
+            answered: {}
+        })
+    } else {
+        await endGame(gameCode)
+    }
+}
+
+export async function endGame(gameCode: string) {
+    const gameRef = doc(db, 'games', gameCode.toUpperCase())
+    await updateDoc(gameRef, {
+        state: 'ended'
+    })
+}
+
