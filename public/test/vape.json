@@ -1,0 +1,122 @@
+[
+  {
+    "question": "Ce conțin țigările electronice?",
+    "img": "https://images.unsplash.com/photo-1612917177097-2b9fa3c0d5c5?w=600",
+    "answers": ["Apă și zahăr", "Doar plante naturale", "Baterie, lichid, aromă", "Nicotină pură"],
+    "correct": 2
+  },
+  {
+    "question": "De ce aromele sunt periculoase pentru tineri?",
+    "img": "https://images.unsplash.com/photo-1588776814546-2f23a32e3c4e?w=600",
+    "answers": ["Sunt prea dulci", "Ascund nicotină și chimicale", "Sunt scumpe", "Sunt greu de găsit"],
+    "correct": 1
+  },
+  {
+    "question": "Care este principalul ingredient care creează dependență în e-cig?",
+    "img": "https://images.unsplash.com/photo-1558375124-369cbbdbfabb?w=600",
+    "answers": ["Apa", "Aromele", "Glicerina", "Nicotina"],
+    "correct": 3
+  },
+  {
+    "question": "De ce adolescenții încep să fumeze e-cig-uri?",
+    "img": "https://images.unsplash.com/photo-1546962339-48c1e1afcc71?w=600",
+    "answers": ["Curiozitate și peer pressure", "Pentru sport", "Pentru sănătate", "Pentru școală"],
+    "correct": 0
+  },
+  {
+    "question": "Ce efect are nicotina asupra creierului adolescentului?",
+    "img": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600",
+    "answers": ["Îl face mai sănătos", "Îl face mai creativ", "Nu are efect", "Crește riscul de dependență și afectează memoria"],
+    "correct": 3
+  },
+  {
+    "question": "Care dintre acestea este un efect pe termen scurt al vape-ului?",
+    "img": "https://images.unsplash.com/photo-1558383929-5e97ff5965b8?w=600",
+    "answers": ["Respirație grea", "Piele mai strălucitoare", "Memorie superbună", "Creștere musculară"],
+    "correct": 0
+  },
+  {
+    "question": "Ce efecte pe termen lung are fumatul de la vârste mici?",
+    "img": "https://images.unsplash.com/photo-1504814532849-92766150d77f?w=600",
+    "answers": ["Creștere în înălțime", "Abilități mai bune la școală", "Dependență, boli respiratorii și cardiace", "Îmbunătățirea memoriei"],
+    "correct": 2
+  },
+  {
+    "question": "Mitul: “E doar abur, deci e safe.” Realitatea este:",
+    "img": "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=600",
+    "answers": ["Este chiar mai sigur decât aerul", "Conține chimicale periculoase", "Nu există chimicale", "E doar apă"],
+    "correct": 1
+  },
+  {
+    "question": "Mitul: “Pot să mă las oricând.” Realitatea:",
+    "img": "https://images.unsplash.com/photo-1611078489935-238237cdd8f5?w=600",
+    "answers": ["Poți să te lași instant", "Nu apare dependența", "E doar un mit urban", "Dependența apare rapid"],
+    "correct": 3
+  },
+  {
+    "question": "Care dintre acestea este o alternativă sănătoasă pentru adolescenți?",
+    "img": "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=600",
+    "answers": ["Sport", "Vape constant", "Fumat pasiv", "Băuturi energizante"],
+    "correct": 0
+  },
+  {
+    "question": "Care organ este cel mai afectat de vape?",
+    "img": "https://images.unsplash.com/photo-1588776814546-2f23a32e3c4e?w=600",
+    "answers": ["Creierul și plămânii", "Unghiile", "Părul", "Ficatul"],
+    "correct": 0
+  },
+  {
+    "question": "Ce risc psihologic crește odată cu vape-ul?",
+    "img": "https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=600",
+    "answers": ["Somn mai bun", "Depresie și anxietate", "Fericire continuă", "Abilități sociale mai bune"],
+    "correct": 1
+  },
+  {
+    "question": "Care este vârsta medie la care adolescenții încep să folosească țigări electronice?",
+    "img": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600",
+    "answers": ["8-10 ani", "13-15 ani", "16-18 ani", "21+ ani"],
+    "correct": 1
+  },
+  {
+    "question": "Ce chimicale toxice se găsesc în e-cig?",
+    "img": "https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?w=600",
+    "answers": ["Propilen glicol, aldehide, metale grele", "Doar apă", "Vitamina C și E", "Doar zahăr"],
+    "correct": 0
+  },
+  {
+    "question": "Cum afectează vape-ul memoria?",
+    "img": "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=600",
+    "answers": ["O îmbunătățește", "O afectează negativ", "Nu are efect", "O face mai rapidă"],
+    "correct": 1
+  },
+  {
+    "question": "Care dintre acestea este un mit despre e-cig?",
+    "img": "https://images.unsplash.com/photo-1516117172878-fd2c41f4a759?w=600",
+    "answers": ["Pot să mă las oricând", "Doar ocazional e ok", "E doar abur", "Toate cele de mai sus"],
+    "correct": 3
+  },
+  {
+    "question": "De ce marketingul vizează adolescenții?",
+    "img": "https://images.unsplash.com/photo-1521335629791-ce4aec67dd53?w=600",
+    "answers": ["Pentru că e ilegal", "Pentru că le place sportul", "Pentru că tinerii sunt curioși și influențabili", "Nu îi vizează"],
+    "correct": 2
+  },
+  {
+    "question": "Ce efect are vape-ul asupra inimii?",
+    "img": "https://images.unsplash.com/photo-1530023367847-a683933f4172?w=600",
+    "answers": ["Ritm mai rapid chiar și în somn", "Îi reduce bătăile", "Îi face sănătoasă", "Ritm mai lent chiar și în timpul sportului"],
+    "correct": 0
+  },
+  {
+    "question": "Ce procent de tineri devin dependenți după ce încep vape-ul?",
+    "img": "https://images.unsplash.com/photo-1525182008055-f88b95ff7980?w=600",
+    "answers": ["5%", "50%", "67%", "100%"],
+    "correct": 2
+  },
+  {
+    "question": "Care e mesajul final pentru tineri?",
+    "img": "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600",
+    "answers": ["Vape-ul e fun și safe", "Nu contează ce fumezi", "Fii cool fără să fii dependent", "Fumează doar ocazional"],
+    "correct": 2
+  }
+]
