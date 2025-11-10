@@ -1,0 +1,23 @@
+[
+  {
+    "question": "is this a quizz?",
+    "answers": [
+      "no",
+      "no",
+      "yes",
+      "no"
+    ],
+    "correct": 2
+  },
+  {
+    "question": "hi?",
+    "img": "fuck you",
+    "answers": [
+      "fuck you",
+      "fuck you",
+      "fuck you",
+      "fuck you"
+    ],
+    "correct": 3
+  }
+]
