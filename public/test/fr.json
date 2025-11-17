@@ -1,0 +1,62 @@
+[
+  {
+    "question": "Quel est le sujet de la vidéo ?",
+    "img": "colocation",
+    "answers": ["l’école", "la vie", "les repas", "la colocation"],
+    "correct": 3
+  },
+  {
+    "question": "Dans quelle ville habite-t-elle ?",
+    "img": "ville-toulouse",
+    "answers": ["Paris", "Lyon", "Toulouse", "Marseille"],
+    "correct": 2
+  },
+  {
+    "question": "Où habite-t-il ?",
+    "img": "maison",
+    "answers": ["une maison", "un studio", "un garage", "un appartement"],
+    "correct": 0
+  },
+  {
+    "question": "Combien de colocataires partagent la maison ?",
+    "img": "colocataires",
+    "answers": ["1", "2", "3", "4"],
+    "correct": 3
+  },
+  {
+    "question": "Quel est leur animal de compagnie ?",
+    "img": "chat",
+    "answers": ["un chat", "un chien", "une tortue", "un perroquet"],
+    "correct": 0
+  },
+  {
+    "question": "Qui fait les courses ?",
+    "img": "courses",
+    "answers": ["un", "deux", "trois", "tous"],
+    "correct": 3
+  },
+  {
+    "question": "Qui est le plus maniaque ?",
+    "img": "maniaque",
+    "answers": ["un", "une fille", "les parents", "le garçon"],
+    "correct": 3
+  },
+  {
+    "question": "Quel est le prix du loyer ?",
+    "img": "loyer",
+    "answers": ["400 €", "350 €", "300 €", "200 €"],
+    "correct": 1
+  },
+  {
+    "question": "Pourquoi habite-on en colocation ?",
+    "img": "voyager",
+    "answers": ["pour voyager", "pour manger", "pour étudier", "pour s’amuser"],
+    "correct": 0
+  },
+  {
+    "question": "Trouvez l’intrus !",
+    "img": "intrus-voiture",
+    "answers": ["la cuisine", "les chambres", "un salon", "une voiture"],
+    "correct": 3
+  }
+]
