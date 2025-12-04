@@ -1,62 +1,62 @@
 [
   {
-    "question": "Quel est le sujet de la vidéo ?",
-    "img": "mannequins-difference",
-    "answers": ["les vêtements", "les mannequins atypiques", "les agences", "les défilés de mode"],
+    "question": "Que signifie 'atypique' ?",
+    "img": "atypique",
+    "answers": ["Très commun", "Hors du commun", "Très petit", "Très grand"],
+    "correct": 1
+  },
+  {
+    "question": "Qu’est-ce qu’une 'particularité physique' ?",
+    "img": "corps",
+    "answers": ["Un vêtement", "Une différence visible du corps", "Une attitude", "Un geste"],
+    "correct": 1
+  },
+  {
+    "question": "Que veut dire 'défier les normes' ?",
+    "img": "normes",
+    "answers": ["Suivre les règles strictement", "Ne pas respecter la mode", "Aller contre les standards traditionnels", "Changer de métier"],
+    "correct": 2
+  },
+  {
+    "question": "Que signifie 'diversité' dans la mode ?",
+    "img": "diversite",
+    "answers": ["Avoir les mêmes corps", "Représenter différents types de corps", "Utiliser le même style", "Garder un seul standard"],
+    "correct": 1
+  },
+  {
+    "question": "Qu’est-ce qu’un 'canon de beauté' ?",
+    "img": "beaute",
+    "answers": ["Une machine", "Une règle qui définit ce qui est considéré comme beau", "Un métier", "Une couleur"],
     "correct": 1
   },
   {
     "question": "Quelle particularité a Winnie Harlow ?",
-    "img": "winnie",
-    "answers": ["albinisme", "tatouages", "vitiligo", "très grande taille"],
-    "correct": 2
-  },
-  {
-    "question": "Pourquoi Rick Genest est célèbre ?",
-    "img": "zombie-boy",
-    "answers": ["il est rappeur", "il est couvert de tatouages", "il a perdu ses cheveux", "il est acteur"],
+    "img": "winnie-harlow",
+    "answers": ["Albinos", "Vitiligo", "Jumeau", "Daltonienne"],
     "correct": 1
   },
   {
-    "question": "Shaun Ross est le premier mannequin masculin…",
+    "question": "Quelle particularité a Shaun Ross ?",
     "img": "shaun-ross",
-    "answers": ["albinos", "aveugle", "chauve", "roux"],
-    "correct": 0
-  },
-  {
-    "question": "Quelle particularité physique a Connie Chiu ?",
-    "img": "connie",
-    "answers": ["trisomie 21", "albinisme", "nanisme", "amputation"],
+    "answers": ["Alopécie", "Albinos", "Souris d’ordinateur", "Cicatrices"],
     "correct": 1
   },
   {
-    "question": "Madeline Stuart est connue pour être mannequin avec…",
-    "img": "madeline",
-    "answers": ["des prothèses", "une barbe", "la trisomie 21", "des yeux vairons"],
+    "question": "Quel mannequin a des taches de rousseur très marquées ?",
+    "img": "nikia-phoenix",
+    "answers": ["Ava Clarke", "Sara Geurts", "Nikia Phoenix", "Diandra Forrest"],
     "correct": 2
   },
   {
-    "question": "De quelle maladie souffre Melanie Gaydos ?",
-    "img": "melanie",
-    "answers": ["vitiligo", "dysplasie ectodermique", "achondroplasie", "albinisme"],
+    "question": "Quel mannequin représente la petite taille dans la vidéo ?",
+    "img": "petite-taille",
+    "answers": ["Madeline Stuart", "Mannequin petite taille", "Melanie Gaydos", "Andrej Pejic"],
     "correct": 1
   },
   {
-    "question": "Aimee Mullins défile avec…",
-    "img": "aimee",
-    "answers": ["un chien-guide", "des lunettes spéciales", "des prothèses artistiques", "un masque facial"],
-    "correct": 2
-  },
-  {
-    "question": "Casey Legler a été connue pour…",
-    "img": "casey",
-    "answers": ["être un mannequin femme dans des vêtements masculins", "créer une marque de luxe", "gagner Top Model", "être la plus petite mannequin du monde"],
-    "correct": 0
-  },
-  {
-    "question": "Quel est le message final de la vidéo ?",
+    "question": "Quel message final transmet la vidéo ?",
     "img": "message",
-    "answers": ["la beauté est toujours parfaite", "la différence peut devenir une force", "les agences refusent l’originalité", "seuls les mannequins classiques réussissent"],
-    "correct": 1
+    "answers": ["Il existe un seul modèle de beauté", "La beauté dépend du maquillage", "La beauté est dans la diversité et l’acceptation", "Il faut suivre les normes strictes"],
+    "correct": 2
   }
 ]
