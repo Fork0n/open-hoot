@@ -1,0 +1,62 @@
+[
+  {
+    "question": "Quel est le sujet de la vidéo ?",
+    "img": "mannequins-difference",
+    "answers": ["les vêtements", "les mannequins atypiques", "les agences", "les défilés de mode"],
+    "correct": 1
+  },
+  {
+    "question": "Quelle particularité a Winnie Harlow ?",
+    "img": "winnie",
+    "answers": ["albinisme", "tatouages", "vitiligo", "très grande taille"],
+    "correct": 2
+  },
+  {
+    "question": "Pourquoi Rick Genest est célèbre ?",
+    "img": "zombie-boy",
+    "answers": ["il est rappeur", "il est couvert de tatouages", "il a perdu ses cheveux", "il est acteur"],
+    "correct": 1
+  },
+  {
+    "question": "Shaun Ross est le premier mannequin masculin…",
+    "img": "shaun-ross",
+    "answers": ["albinos", "aveugle", "chauve", "roux"],
+    "correct": 0
+  },
+  {
+    "question": "Quelle particularité physique a Connie Chiu ?",
+    "img": "connie",
+    "answers": ["trisomie 21", "albinisme", "nanisme", "amputation"],
+    "correct": 1
+  },
+  {
+    "question": "Madeline Stuart est connue pour être mannequin avec…",
+    "img": "madeline",
+    "answers": ["des prothèses", "une barbe", "la trisomie 21", "des yeux vairons"],
+    "correct": 2
+  },
+  {
+    "question": "De quelle maladie souffre Melanie Gaydos ?",
+    "img": "melanie",
+    "answers": ["vitiligo", "dysplasie ectodermique", "achondroplasie", "albinisme"],
+    "correct": 1
+  },
+  {
+    "question": "Aimee Mullins défile avec…",
+    "img": "aimee",
+    "answers": ["un chien-guide", "des lunettes spéciales", "des prothèses artistiques", "un masque facial"],
+    "correct": 2
+  },
+  {
+    "question": "Casey Legler a été connue pour…",
+    "img": "casey",
+    "answers": ["être un mannequin femme dans des vêtements masculins", "créer une marque de luxe", "gagner Top Model", "être la plus petite mannequin du monde"],
+    "correct": 0
+  },
+  {
+    "question": "Quel est le message final de la vidéo ?",
+    "img": "message",
+    "answers": ["la beauté est toujours parfaite", "la différence peut devenir une force", "les agences refusent l’originalité", "seuls les mannequins classiques réussissent"],
+    "correct": 1
+  }
+]
